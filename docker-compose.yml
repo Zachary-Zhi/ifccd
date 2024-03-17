@@ -1,0 +1,28 @@
+version: '3'
+services:
+  flask:
+    container_name: finalifccdxgd1
+    image: finalifccd:7.2
+    ports:
+      - "5004:5000"
+    tty: true
+    runtime: nvidia
+    privileged: true
+    restart: always
+    volumes:
+      - /home/ubuntu/share/xgd/ifccd_latest/ifccd0424:/app
+      - /home/ubuntu/share/xgd/mongoDB:/home/Data/mongoDB1
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - IFCCD_PATH=//192.168.8.249/share1/
+      - ENHANCE_PATH=//192.168.8.249/share/
+      - IFCCD_SMB_USERNAME=ubuntu
+      - IFCCD_SMB_PASSWD=1
+      - IFCCD_SMB_IP=192.168.8.249
+      - ENHANCE_SMB_USERNAME=ubuntu
+      - ENHANCE_SMB_PASSWD=1
+      - ENHANCE_SMB_IP=192.168.8.249
+      - WEBSOCKET_IP=192.168.8.249
+      - WEBSOCKET_PORT=5001
+      - WEBSOCKET_URL=wsIFCCD
+    command: /bin/bash -c "cd /app && sh mount1.sh && sh start-mongo.sh && flask run"

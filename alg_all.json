@@ -1,0 +1,323 @@
+{
+    "preprocess": {
+        "denoise": [
+            {
+                "algName": "linyu_aver",
+                "algType": "denoise",
+                "description": "universal enhance",
+                "algcName": "通用图像去噪非智能方法"
+            },
+            {
+                "algName": "wiener",
+                "algType": "denoise",
+                "description": "SAR",
+                "algcName": "SAR图像去噪非智能方法"
+            },
+            {
+                "algName": "frost",
+                "algType": "denoise",
+                "description": "SAR",
+                "algcName": "SAR图像去噪非智能方法"
+            },
+            {
+                "algName": "lee",
+                "algType": "denoise",
+                "description": "SAR",
+                "algcName": "SAR图像去噪非智能方法"
+            },
+            {
+                "algName": "ADNet",
+                "algType": "denoise",
+                "description": "SAR",
+                "algcName": "SAR图像去噪智能方法"
+            },
+            {
+                "algName": "zishiying",
+                "algType": "denoise",
+                "description": "IR",
+                "algcName": "红外图像去噪非智能方法"
+            },
+            {
+                "algName": "gamma",
+                "algType": "denoise",
+                "description": "IR",
+                "algcName": "红外图像去噪非智能方法"
+            },
+            {
+                "algName": "wavelet",
+                "algType": "denoise",
+                "description": "only IR",
+                "algcName": "红外图像去噪非智能方法"
+            },
+            {
+                "algName": "pinyu",
+                "algType": "denoise",
+                "description": "VIS",
+                "algcName": "可见光图像去噪非智能方法"
+            },
+            {
+                "algName": "DRUNet_main",
+                "algType": "denoise",
+                "description": "IR",
+                "algcName": "可见光图像去噪智能方法"
+            },
+            {
+                "algName": "retinex",
+                "algType": "denoise",
+                "description": "VIS",
+                "algcName": "可见光图像去噪智能方法"
+            },
+            {
+                "algName": "tongtai",
+                "algType": "denoise",
+                "description": "VIS",
+                "algcName": "可见光图像去噪非智能方法"
+            },
+            {
+                "algName": "dehaze",
+                "algType": "denoise",
+                "description": "VIS, only png jpg",
+                "algcName": "可见光图像去噪(只可处理jpg、png图片)智能方法"
+            }
+        ],
+        "enhance": [
+            {
+                "algName": "Gaussian",
+                "algType": "enhance",
+                "description": "universal enhance",
+                "algcName": "通用图像增强非智能方法"
+            },
+            {
+                "algName": "middle",
+                "algType": "enhance",
+                "description": "universal enhance",
+                "algcName": "通用图像增强非智能方法"
+            },
+            {
+                "algName": "bianyuan",
+                "algType": "enhance",
+                "description": "universal bianyuan enhance",
+                "algcName": "通用边缘增强非智能方法"
+            },
+            {
+                "algName": "Psedocolor",
+                "algType": "enhance",
+                "description": "universal enhance  add psedocolor",
+                "algcName": "添加伪彩非智能方法"
+            }
+        ]
+    },
+    "georeference": [
+        {
+            "algName": "GPS",
+            "algType": "georeference",
+            "algcName": "通用图像配准非智能方法"
+        },
+        {
+            "algName": "SAR_tradition",
+            "algType": "georeference",
+            "algcName": "SAR-SAR图像配准非智能方法"
+        },
+        {
+            "algName": "SAR",
+            "algType": "georeference",
+            "algcName": "SAR-SAR图像配准智能方法"
+        },
+        {
+            "algName": "IR_tradition",
+            "algType": "georeference",
+            "algcName": "红外-红外图像配准非智能方法"
+        },
+        {
+            "algName": "IR",
+            "algType": "georeference",
+            "algcName": "红外-红外图像配准智能方法"
+        },
+        {
+            "algName": "SAR_IR_tradition",
+            "algType": "georeference",
+            "description": "first photo is IR, second photo is SAR",
+            "algcName": "红外-SAR图像配准非智能方法"
+        },
+        {
+            "algName": "SAR_IR",
+            "algType": "georeference",
+            "description": "first photo is IR, second photo is SAR",
+            "algcName": "红外-SAR图像配准智能方法"
+        },
+        {
+            "algName": "IR_VIS_tradition",
+            "algType": "georeference",
+            "algcName": "红外-可见光图像配准非智能方法"
+        },
+        {
+            "algName": "IR_VIS",
+            "algType": "georeference",
+            "algcName": "红外-可见光图像配准智能方法"
+        },
+        {
+            "algName": "VIS_tradition",
+            "algType": "georeference",
+            "algcName": "可见光-可见光图像配准非智能方法"
+        },
+        {
+            "algName": "VIS",
+            "algType": "georeference",
+            "algcName": "可见光-可见光图像配准智能方法"
+        },
+        {
+            "algName": "VIS_SAR_tradition",
+            "algType": "georeference",
+            "description": "first photo is VIS, second photo is SAR",
+            "algcName": "可见光-SAR图像配准非智能方法"
+        },
+        {
+            "algName": "VIS_SAR",
+            "algType": "georeference",
+            "description": "first photo is VIS, second photo is SAR",
+            "algcName": "可见光-SAR图像配准智能方法"
+        }
+    ],
+    "fusion": [
+        {
+            "algName": "GFCE",
+            "algType": "fusion",
+            "description": "SAR_IR",
+            "algcName": "红外-SAR图像融合非智能方法"
+        },
+        {
+            "algName": "GFF",
+            "algType": "fusion",
+            "description": "SAR_IR",
+            "algcName": "红外-SAR图像融合非智能方法"
+        },
+        {
+            "algName": "DIF_Net",
+            "algType": "fusion",
+            "description": "SAR_IR",
+            "algcName": "红外-SAR图像融合智能方法"
+        },
+        {
+            "algName": "TIF",
+            "algType": "fusion",
+            "description": "SAR_VIS",
+            "algcName": "可见光-SAR图像融合非智能方法"
+        },
+        {
+            "algName": "VSMWLS",
+            "algType": "fusion",
+            "description": "SAR_VIS",
+            "algcName": "可见光-SAR图像融合非智能方法"
+        },
+        {
+            "algName": "IFCNN",
+            "algType": "fusion",
+            "description": "SAR_VIS",
+            "algcName": "可见光-SAR图像融合智能方法"
+        },
+        {
+            "algName": "ADF",
+            "algType": "fusion",
+            "description": "IR_VIS",
+            "algcName": "可见光-红外图像融合非智能方法"
+        },
+        {
+            "algName": "WAVELET",
+            "algType": "fusion",
+            "description": "IR_VIS",
+            "algcName": "可见光-红外图像融合非智能方法"
+        },
+        {
+            "algName": "CNN",
+            "algType": "fusion",
+            "description": "IR_VIS",
+            "algcName": "可见光-红外图像融合智能方法"
+        }
+    ],
+    "detect": [
+        {
+            "algName": "CVA",
+            "algType": "detect",
+            "description": "SAR",
+            "algcName": "SAR图像变化检测非智能方法"
+        },
+        {
+            "algName": "MAD",
+            "algType": "detect",
+            "description": "SAR",
+            "algcName": "SAR图像变化检测非智能方法"
+        },
+        {
+            "algName": "Deep_SAR_CD",
+            "algType": "detect",
+            "description": "SAR",
+            "algcName": "SAR图像变化检测智能方法"
+        },
+        {
+            "algName": "SAR_TCD",
+            "algType": "detect",
+            "description": "SAR mubiaoji detect",
+            "algcName": "SAR目标级变化检测智能方法"
+        },
+        {
+            "algName": "IR_PCA",
+            "algType": "detect",
+            "description": "IR",
+            "algcName": "红外图像变化检测非智能方法"
+        },
+        {
+            "algName": "SFA",
+            "algType": "detect",
+            "description": "IR",
+            "algcName": "红外图像变化检测非智能方法"
+        },
+        {
+            "algName": "IR_CF",
+            "algType": "detect",
+            "description": "IR",
+            "algcName": "红外图像变化检测智能方法"
+        },
+        {
+            "algName": "PCAKmeans",
+            "algType": "detect",
+            "description": "VIS",
+            "algcName": "可见光图像变化检测非智能方法"
+        },
+        {
+            "algName": "ISFA",
+            "algType": "detect",
+            "description": "VIS",
+            "algcName": "可见光图像变化检测非智能方法"
+        },
+        {
+            "algName": "LBNet",
+            "algType": "detect",
+            "description": "VIS",
+            "algcName": "可见光图像变化检测智能方法"
+        },
+        {
+            "algName": "SNUNet",
+            "algType": "detect",
+            "description": "VIS",
+            "algcName": "可见光图像变化检测智能方法"
+        },
+        {
+            "algName": "ChangeFormer_detect",
+            "algType": "detect",
+            "description": "VIS",
+            "algcName": "可见光图像变化检测智能方法"
+        },
+        {
+            "algName": "VIS_DDNet",
+            "algType": "detect",
+            "description": "VIS",
+            "algcName": "可见光图像变化检测智能方法"
+        },
+        {
+            "algName": "tcd",
+            "algType": "detect",
+            "description": "mubiaoji detect",
+            "algcName": "可见光目标级变化检测智能方法"
+        }
+    ]
+}
