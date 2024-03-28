@@ -7,6 +7,7 @@ SHA_TZ = timezone(
     timedelta(hours=8),
     name='Asia/Shanghai'
 )
+#
 class Task(object):
     def __init__(self, task_params_json, task_status, task_type, taskClassesType, user_name = "", task_description = "", task_algName = ""):
         self.user_name = user_name

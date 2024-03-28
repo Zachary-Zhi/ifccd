@@ -15,6 +15,7 @@ if WEBSOCKET_URL is None:
 ws_url = "ws://" + str(WEBSOCKET_IP) + ":" + str(WEBSOCKET_PORT) + "/" + str(WEBSOCKET_URL)
 
 
+# info
 def send_message(TaskId, Owner, Info, Result, Err, import_list = None):
     print("websocket send")
     print(ws_url)

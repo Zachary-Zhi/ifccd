@@ -6,6 +6,7 @@ from collections import deque
 ifccd_task_queueLock = threading.Lock()
 enhance_task_queueLock = threading.Lock()
 
+#长队列
 class ifccd_task_priority_queue(object):
 
     def __init__(self):
@@ -15,6 +16,7 @@ class ifccd_task_priority_queue(object):
         return self.__ifccd_task_priority_deque
 
     def add_ifccd_task_to_queue(self, new_task):
+        #上锁
         ifccd_task_queueLock.acquire()
         self.__ifccd_task_priority_deque.append(new_task)
         ifccd_task_queueLock.release()
@@ -78,6 +80,7 @@ class ifccd_task_priority_queue(object):
         ifccd_task_queueLock.release()
         return pos
 
+#短对列
 class enhance_task_priority_queue(object):
     def __init__(self):
         self.__enhance_task_priority_queue = deque()

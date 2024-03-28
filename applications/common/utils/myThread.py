@@ -27,6 +27,7 @@ SHA_TZ = timezone(
 exitFlag = 0
 queueLock = threading.Lock()
 
+#只处理短任务线程
 class Enhance_Task_Handle_Thread (threading.Thread):
     def __init__(self, threadID, name, enhance_task_q):
         threading.Thread.__init__(self)
@@ -53,22 +54,25 @@ class Both_Task_Handle_Thread (threading.Thread):
         print ("退出线程：" + self.name)
 
 
-
+#短任务线程执行函数
 def process_enhance_task(threadName, enhance_task_q):
     while not exitFlag:
         queueLock.acquire()
+        #表示有任务要处理
         if enhance_task_q.get_nums() > 0:
+
             tmp_task = enhance_task_q.get_que().popleft()
             queueLock.release()
+            #任务状态改变
             update_task_status_by_task_id(tmp_task.task_id, 2)
 
             task_id = str(tmp_task.task_id)
             print('task_id: ', task_id)
-            send_message(task_id, tmp_task.task_params_json.get("user"),
-                                                                       "begin to execute", "", "")
+            #发送通知
+            send_message(task_id, tmp_task.task_params_json.get("user"), "begin to execute", "", "")
+            #处理task的相关信息
             task_executing_dic[task_id]["taskStage"] = "prepare to execute"
-
-
+            #请求体json内容
             tmp_task_dic = tmp_task.task_params_json
 
             m_operator = tmp_task_dic.get("alg").get("algType")
@@ -80,10 +84,12 @@ def process_enhance_task(threadName, enhance_task_q):
             if minio_photo_upload_path == None or minio_photo_upload_path == "":
                 local_upload_path = ""
             else:
+                #设置url
                 nas_output_url = url_map(minio_photo_upload_path)
-                print("nas_output_url: " + nas_output_url)
+                #print("nas_output_url: " + nas_output_url)
+                #本地文件夹路径
                 local_upload_path = docker_map_url_enhance_prefix + nas_output_url + "/"
-                print(local_upload_path)
+                #print(local_upload_path)
 
             nas_import_url = url_map(json_photo_download_path)
 
@@ -103,7 +109,7 @@ def process_enhance_task(threadName, enhance_task_q):
             log_dic_current['taskId'] = task_id
 
             tasktype = select_task_by_task_id(task_id)['task_type']
-
+            #长任务是1 短任务是0
             if (int(tasktype) == 1):
                 log_dic_current['taskType'] = 'LongTasks'
             else:
@@ -119,6 +125,7 @@ def process_enhance_task(threadName, enhance_task_q):
 
                 try:
                     processErrorFlag = False
+                    #
                     out = process_img_adjust_task(alg_dic, local_download_path, local_upload_path, task_id)
                 except Exception as e:
                     print(e)
@@ -244,9 +251,14 @@ def process_enhance_task(threadName, enhance_task_q):
             else:
                 print("unknown action")
             print("%s processing %s %s" % (threadName, tmp_task.task_id, tmp_task.task_params_json))
+            #数据库操作
+            #更新任务输出图像地址
             update_task_resulturl_by_task_id(task_id, task_executing_dic[task_id]["result"])
+            #更新状态
             update_task_status_by_task_id(task_id, 1)
+            #更新结束时间
             update_task_endtime_by_task_id(task_id)
+            #字典删除任务信息
             task_executing_dic.pop(task_id)
 
         else:
@@ -671,7 +683,7 @@ def process_all_task(threadName, ifccd_task_q, enhance_task_q):
             queueLock.release()
         time.sleep(1)
 
-
+# 初始化线程
 def init_task_handle_thread():
     threads = []
     threadID = 1
@@ -700,7 +712,7 @@ def init_task_handle_thread():
 '''
     下面任务是enhance_task
 '''
-
+#校正
 def process_img_adjust_task(alg_dic, photo_import_path, photo_output_path, task_id):
     photo_import_name =from_path_get_filefullname(photo_import_path)
     alg_name = alg_dic.get("algName")
@@ -730,18 +742,28 @@ def process_img_adjust_task(alg_dic, photo_import_path, photo_output_path, task_
     torch.cuda.empty_cache(),print('显存清理完成！')
     return (res)
 
+#去噪
 def process_img_denoise_task(alg_dic, photo_import_path,  photo_output_path, task_id, forder):
+    #拿到文件名
     photo_import_name = from_path_get_filefullname(photo_import_path)
+    #获取信息
     alg_name = alg_dic.get("algName")
     alg_params = alg_dic.get("params")
     print("使用的算法名称是：", alg_name)
     print("算法参数是： ", alg_params)
     src_file = open(photo_import_path, "rb")
+    #切割字符串
+    #split_for_pin[0] 文件名
+    #split_for_pin[1] 文件类型
     split_for_pin = photo_import_name.rsplit(".", 1)
+    #不带地理信息
     photo_output_name = split_for_pin[0] +  "_denoise_"  + "." + split_for_pin[1]
+    #带地理信息
     ret_output_name = split_for_pin[0] +  "_denoise_withGeo." + split_for_pin[1]
+    #默认值
     if photo_output_path is None or len(photo_output_path) == 0 or photo_output_path == "":
         import os
+        #str(forder)时间戳
         save_forder = options.docker_map_url_enhance_prefix + os.getenv('SAVE_PATH') + str(forder) + "/"
         upload_path = options.docker_map_url_enhance_prefix + os.getenv('SAVE_PATH') + str(forder) + "/" +photo_output_name
         ret_upload_path = options.docker_map_url_enhance_prefix + os.getenv('SAVE_PATH') + str(forder) + "/" + ret_output_name
@@ -750,6 +772,7 @@ def process_img_denoise_task(alg_dic, photo_import_path,  photo_output_path, tas
         upload_path = photo_output_path + str(forder) + "/" + photo_output_name
         ret_upload_path = photo_output_path + str(forder) + "/" + ret_output_name
     import os
+    #检测文件夹是否存在
     _ = os.path.exists(save_forder)
     if not _:
         os.makedirs(save_forder)
@@ -855,7 +878,7 @@ def process_img_denoise_task(alg_dic, photo_import_path,  photo_output_path, tas
     torch.cuda.empty_cache(),print('显存清理完成！')
     return res
 
-
+#增强
 def process_img_enhance_task(alg_dic, photo_import_path, photo_output_path, task_id, forder):
     photo_import_name = from_path_get_filefullname(photo_import_path)
     alg_name = alg_dic.get("algName")
@@ -919,7 +942,7 @@ def process_img_enhance_task(alg_dic, photo_import_path, photo_output_path, task
     torch.cuda.empty_cache(),print('显存清理完成！')
     return res
 
-
+#复原（未使用）
 def process_img_revise_task(alg_dic, photo_import_path, photo_output_path, task_id):
     photo_import_name = from_path_get_filefullname(photo_import_path)
     alg_name = alg_dic.get("algName")
@@ -953,6 +976,7 @@ def process_img_revise_task(alg_dic, photo_import_path, photo_output_path, task_
 '''
     下面任务是ifccd_task
 '''
+# 配准
 def process_img_georeference_task(georeference_dic, photo_import_path1, photo_import_path2, photo_output_path, task_id, forder):
     alg_name = georeference_dic.get("algName")
     alg_params = georeference_dic.get("params")
@@ -1098,6 +1122,7 @@ def process_img_georeference_task(georeference_dic, photo_import_path1, photo_im
     torch.cuda.empty_cache(),print('显存清理完成！')
     return res_list
 
+#融合
 def process_img_fusion_task(fusion_dic, res_list, photo_output_path, task_id, local_download_path1, forder, proportion):
 
     alg_name = fusion_dic.get("algName")
@@ -1204,6 +1229,7 @@ def process_img_fusion_task(fusion_dic, res_list, photo_output_path, task_id, lo
     torch.cuda.empty_cache(),print('显存清理完成！')
     return res
 
+#变量检测
 def process_img_detect_task(detect_dic, local_res_list, photo_output_path, task_id, local_download_path1, forder):
 
     alg_name = detect_dic.get("algName")
